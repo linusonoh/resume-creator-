@@ -217,10 +217,10 @@ export default function ResumeBuilderPage() {
       <header className="h-14 border-b border-slate-800 bg-slate-900 px-6 flex items-center justify-between print:hidden shrink-0">
         <div className="flex items-center gap-2.5">
           <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-sm">
-            R
+            O
           </div>
           <div>
-            <h1 className="text-sm font-bold text-slate-100 tracking-tight">Antigravity</h1>
+            <h1 className="text-sm font-bold text-slate-100 tracking-tight">Onpoint Resume</h1>
             <p className="text-[9px] text-slate-400 leading-none">Markdown Resume Creator</p>
           </div>
         </div>

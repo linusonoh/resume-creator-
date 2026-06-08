@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Antigravity Resume Builder",
+  title: "Onpoint Resume Builder",
   description: "Create high-performance, ATS-friendly markdown resumes in real-time.",
 };
 
