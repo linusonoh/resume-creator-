@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import EditorPanel from '@/components/resume/EditorPanel';
 import PreviewPanel from '@/components/resume/PreviewPanel';
 import { useResumeStore, LayoutTheme } from '@/store/resumeStore';
-import { Printer, Palette, ChevronDown, FileText, Image as ImageIcon } from 'lucide-react';
+import { Printer, Palette, ChevronDown, FileText, Image as ImageIcon, Eye, ArrowLeft } from 'lucide-react';
 import { toJpeg } from 'html-to-image';
 import Image from 'next/image';
 
@@ -348,18 +348,52 @@ export default function ResumeBuilderPage() {
         </div>
       </main>
 
+      {/* Floating Action Buttons for Mobile View */}
+      {activeTab === 'edit' && (
+        <button
+          onClick={() => setActiveTab('preview')}
+          className="md:hidden fixed bottom-6 right-6 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-5 py-3.5 rounded-full shadow-2xl flex items-center gap-2 z-40 transition-all active:scale-95 cursor-pointer border border-indigo-500"
+        >
+          <Eye size={14} />
+          Preview Resume
+        </button>
+      )}
+
+      {activeTab === 'preview' && (
+        <div className="md:hidden fixed bottom-6 inset-x-6 flex items-center justify-between gap-4 z-40 print:hidden">
+          <button
+            onClick={() => setActiveTab('edit')}
+            className="bg-slate-900 hover:bg-slate-800 text-slate-100 border border-slate-850 font-bold text-xs px-5 py-3.5 rounded-full shadow-2xl flex items-center gap-2 transition-all active:scale-95 cursor-pointer"
+          >
+            <ArrowLeft size={14} />
+            Back to Edit
+          </button>
+          
+          <button
+            onClick={() => setShowMobileSettings(!showMobileSettings)}
+            className={`font-bold text-xs px-5 py-3.5 rounded-full shadow-2xl flex items-center gap-2 transition-all active:scale-95 cursor-pointer border
+              ${showMobileSettings 
+                ? 'bg-indigo-600 border-indigo-500 text-white' 
+                : 'bg-slate-900 border-slate-850 text-slate-100'}`}
+          >
+            <Palette size={14} />
+            Design
+          </button>
+        </div>
+      )}
+
       {/* Mobile Bottom Settings Sheet Overlay */}
       {showMobileSettings && (
-        <div className="md:hidden fixed inset-x-0 bottom-[49px] bg-slate-900 border-t border-slate-800 px-6 py-4 flex flex-col gap-3.5 print:hidden z-40 animate-in slide-in-from-bottom duration-200">
+        <div className="md:hidden fixed inset-x-0 bottom-0 bg-slate-900 border-t border-slate-800 px-6 py-5 pb-8 flex flex-col gap-4 print:hidden z-50 animate-in slide-in-from-bottom duration-200 rounded-t-2xl shadow-2xl">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-350 flex items-center gap-1">
               <Palette size={13} className="text-indigo-400" /> Customize Layout
             </span>
             <button 
               onClick={() => setShowMobileSettings(false)}
-              className="text-[10px] text-slate-500 hover:text-slate-300 font-bold uppercase tracking-wider"
+              className="text-[10px] text-slate-400 hover:text-slate-200 font-bold uppercase tracking-wider bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-lg"
             >
-              Close
+              Done
             </button>
           </div>
           
@@ -412,41 +446,6 @@ export default function ResumeBuilderPage() {
           </div>
         </div>
       )}
-
-      {/* Mobile Bottom Navigation Bar */}
-      <div className="md:hidden border-t border-slate-800 bg-slate-900 px-4 py-2 flex items-center justify-between print:hidden shrink-0 z-40">
-        <div className="flex items-center gap-1 bg-slate-950 border border-slate-800 rounded-lg p-1 w-full max-w-[240px]">
-          <button
-            onClick={() => {
-              setActiveTab('edit');
-              setShowMobileSettings(false);
-            }}
-            className={`flex-1 text-[11px] py-1.5 rounded-md font-semibold text-center transition-all cursor-pointer
-              ${activeTab === 'edit' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}
-          >
-            Edit Form
-          </button>
-          <button
-            onClick={() => {
-              setActiveTab('preview');
-              setShowMobileSettings(false);
-            }}
-            className={`flex-1 text-[11px] py-1.5 rounded-md font-semibold text-center transition-all cursor-pointer
-              ${activeTab === 'preview' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}
-          >
-            Preview A4
-          </button>
-        </div>
-
-        {/* Mobile customize/theme/accent toggle button */}
-        <button
-          onClick={() => setShowMobileSettings(!showMobileSettings)}
-          className={`text-[11px] px-3.5 py-1.5 border rounded-lg font-semibold cursor-pointer transition-all flex items-center gap-1.5
-            ${showMobileSettings ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-slate-950 text-slate-300 border-slate-800'}`}
-        >
-          <Palette size={12} /> Customize
-        </button>
-      </div>
     </div>
   );
 }
