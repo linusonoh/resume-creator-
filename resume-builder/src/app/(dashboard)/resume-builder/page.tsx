@@ -6,6 +6,7 @@ import PreviewPanel from '@/components/resume/PreviewPanel';
 import { useResumeStore, LayoutTheme } from '@/store/resumeStore';
 import { Printer, Palette, ChevronDown, FileText, Image as ImageIcon } from 'lucide-react';
 import { toJpeg } from 'html-to-image';
+import Image from 'next/image';
 
 export default function ResumeBuilderPage() {
   const { theme, setTheme, accentColor, setAccentColor } = useResumeStore();
@@ -197,9 +198,21 @@ export default function ResumeBuilderPage() {
   if (!mounted) {
     return (
       <div className="w-screen h-screen flex items-center justify-center bg-slate-950 text-indigo-400">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-xs font-semibold tracking-wider font-mono">Initializing Builder...</span>
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative">
+            <Image
+              src="/Logo.png"
+              alt="Onpoint Logo"
+              width={80}
+              height={44}
+              className="h-12 w-auto object-contain rounded-lg animate-pulse"
+              priority
+            />
+          </div>
+          <div className="flex items-center gap-2 mt-2">
+            <div className="w-3.5 h-3.5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-xs font-semibold tracking-wider font-mono text-slate-400">Initializing Builder...</span>
+          </div>
         </div>
       </div>
     );
@@ -215,13 +228,18 @@ export default function ResumeBuilderPage() {
     <div className="w-screen h-screen flex flex-col bg-slate-950 select-none overflow-hidden print:h-auto print:overflow-visible">
       {/* Dashboard Topbar Navigation */}
       <header className="h-14 border-b border-slate-800 bg-slate-900 px-6 flex items-center justify-between print:hidden shrink-0">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-sm">
-            O
-          </div>
-          <div>
-            <h1 className="text-sm font-bold text-slate-100 tracking-tight">Onpoint Resume</h1>
-            <p className="text-[9px] text-slate-400 leading-none">Markdown Resume Creator</p>
+        <div className="flex items-center gap-3">
+          <Image
+            src="/Logo.png"
+            alt="Onpoint Logo"
+            width={58}
+            height={32}
+            className="h-8 w-auto object-contain rounded-md"
+            priority
+          />
+          <div className="border-l border-slate-800 pl-3">
+            <h1 className="text-sm font-bold text-slate-100 tracking-tight leading-none mb-0.5">Onpoint</h1>
+            <p className="text-[9px] text-slate-400 leading-none">Resume Creator</p>
           </div>
         </div>
 
