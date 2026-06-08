@@ -166,9 +166,9 @@ export default function EditorPanel() {
     <div className="w-full md:w-[480px] bg-slate-950 border-r border-slate-800 flex flex-col h-full print:hidden">
       {/* Editor Header */}
       <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-900">
-        <div>
-          <h2 className="text-md font-bold text-white tracking-tight">Resume Editor</h2>
-          <p className="text-[10px] text-slate-400">Add info & style with basic Markdown</p>
+        <div className="min-w-0 pr-2">
+          <h2 className="text-md font-bold text-white tracking-tight truncate">Resume Editor</h2>
+          <p className="text-[10px] text-slate-400 hidden sm:block">Add info & style with basic Markdown</p>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
           <input
@@ -180,7 +180,7 @@ export default function EditorPanel() {
           />
           
           {/* Undo/Redo Buttons */}
-          <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5 mr-1">
+          <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5 mr-0.5">
             <button 
               disabled={past.length === 0}
               onClick={undo}
@@ -205,7 +205,7 @@ export default function EditorPanel() {
             title="Import JSON Backup"
           >
             <Upload size={11} />
-            Import
+            <span className="hidden min-[420px]:inline">Import</span>
           </label>
           <button
             onClick={handleExportJSON}
@@ -213,7 +213,7 @@ export default function EditorPanel() {
             title="Export JSON Backup"
           >
             <Download size={11} />
-            Export
+            <span className="hidden min-[420px]:inline">Export</span>
           </button>
           <button 
             onClick={handleStartFresh}
@@ -221,7 +221,7 @@ export default function EditorPanel() {
             title="Wipe all content and start fresh"
           >
             <Trash2 size={11} className="text-slate-450 hover:text-red-400" />
-            Clear
+            <span className="hidden min-[420px]:inline">Clear</span>
           </button>
           <button 
             onClick={() => {
@@ -233,7 +233,7 @@ export default function EditorPanel() {
             title="Reset to defaults"
           >
             <RotateCcw size={11} />
-            Reset
+            <span className="hidden min-[420px]:inline">Reset</span>
           </button>
         </div>
       </div>

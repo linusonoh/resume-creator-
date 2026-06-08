@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useResumeStore, ResumeSection } from '@/store/resumeStore';
 import { FONT_PAIRINGS } from '@/config/fonts';
 
@@ -111,6 +111,43 @@ export default function PreviewPanel() {
   const { personalInfo, sections, theme, currentFontId, accentColor } = useResumeStore();
   const activeFont = FONT_PAIRINGS.find((f) => f.id === currentFontId) || FONT_PAIRINGS[0];
   const colorConfig = ACCENT_COLORS[accentColor] || ACCENT_COLORS.indigo;
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+  const [sheetHeight, setSheetHeight] = useState(1123);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const width = entry.contentRect.width;
+        // A4 width in pixels is ~794px. We add 32px of margin (p-4 on mobile).
+        const padding = 32;
+        const availableWidth = width - padding;
+
+        const sheetEl = document.getElementById('resume-a4-sheet');
+        const layoutHeight = sheetEl ? sheetEl.offsetHeight : 1123;
+        setSheetHeight(layoutHeight);
+
+        if (availableWidth < 794) {
+          setScale(Math.max(0.2, availableWidth / 794));
+        } else {
+          setScale(1);
+        }
+      }
+    });
+    resizeObserver.observe(containerRef.current);
+
+    const timer = setTimeout(() => {
+      const sheetEl = document.getElementById('resume-a4-sheet');
+      if (sheetEl) setSheetHeight(sheetEl.offsetHeight);
+    }, 150);
+
+    return () => {
+      resizeObserver.disconnect();
+      clearTimeout(timer);
+    };
+  }, [sections, theme, currentFontId, personalInfo]);
 
   const renderHeader = () => {
     const { name, email, phone, website, github, linkedin } = personalInfo;
@@ -228,16 +265,35 @@ export default function PreviewPanel() {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto bg-slate-900 p-8 flex justify-center items-start print:bg-white print:p-0 print:overflow-visible">
-      {/* A4 Paper Sheet Wrapper */}
+    <div 
+      ref={containerRef}
+      className="flex-1 overflow-y-auto bg-slate-900 p-4 md:p-8 flex justify-center items-start print:bg-white print:p-0 print:overflow-visible"
+    >
+      {/* Scaled A4 Wrapper */}
       <div 
-        id="resume-a4-sheet" 
-        className={`w-[210mm] min-h-[297mm] bg-white shadow-2xl p-[20mm] text-slate-800 ${activeFont.bodyClass} leading-relaxed select-text
-          print:shadow-none print:w-full print:p-0 print:min-h-0 print:bg-white`}
+        style={scale < 1 ? {
+          width: `${794 * scale}px`,
+          height: `${sheetHeight * scale}px`,
+          position: 'relative'
+        } : {}}
+        className="shrink-0 print:w-full print:h-auto"
       >
-        {renderHeader()}
-        <div className="space-y-2">
-          {sections.map(renderSection)}
+        <div 
+          id="resume-a4-sheet" 
+          style={scale < 1 ? {
+            transform: `scale(${scale})`,
+            transformOrigin: 'top left',
+            position: 'absolute',
+            left: 0,
+            top: 0
+          } : {}}
+          className={`w-[210mm] min-h-[297mm] bg-white shadow-2xl p-[20mm] text-slate-800 ${activeFont.bodyClass} leading-relaxed select-text
+            print:shadow-none print:w-full print:p-0 print:min-h-0 print:bg-white print:position-relative print:transform-none`}
+        >
+          {renderHeader()}
+          <div className="space-y-2">
+            {sections.map(renderSection)}
+          </div>
         </div>
       </div>
     </div>

@@ -12,6 +12,8 @@ export default function ResumeBuilderPage() {
   const { theme, setTheme, accentColor, setAccentColor } = useResumeStore();
   const [mounted, setMounted] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
+  const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit');
+  const [showMobileSettings, setShowMobileSettings] = useState(false);
 
   // Suppress hydration errors by waiting for the store to hydrate on the client
   useEffect(() => {
@@ -237,7 +239,7 @@ export default function ResumeBuilderPage() {
             className="h-8 w-auto object-contain rounded-md"
             priority
           />
-          <div className="border-l border-slate-800 pl-3">
+          <div className="hidden sm:block border-l border-slate-800 pl-3">
             <h1 className="text-sm font-bold text-slate-100 tracking-tight leading-none mb-0.5">Onpoint</h1>
             <p className="text-[9px] text-slate-400 leading-none">Resume Creator</p>
           </div>
@@ -246,7 +248,7 @@ export default function ResumeBuilderPage() {
         {/* Controls: Theme Selector, Accent Color Picker, and Dynamic Exporter */}
         <div className="flex items-center gap-4">
           {/* Theme Selector */}
-          <div className="flex items-center bg-slate-950 border border-slate-800 rounded-lg p-1">
+          <div className="hidden md:flex items-center bg-slate-950 border border-slate-800 rounded-lg p-1">
             <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider px-2 flex items-center gap-1">
               <Palette size={11} /> Theme
             </span>
@@ -268,7 +270,7 @@ export default function ResumeBuilderPage() {
           </div>
 
           {/* Accent Color Picker */}
-          <div className="flex items-center bg-slate-950 border border-slate-800 rounded-lg p-1 h-[28px]">
+          <div className="hidden md:flex items-center bg-slate-950 border border-slate-800 rounded-lg p-1 h-[28px]">
             <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider px-2 flex items-center gap-1">
               Accent
             </span>
@@ -337,10 +339,114 @@ export default function ResumeBuilderPage() {
       </header>
 
       {/* Main Split-Pane Workspace */}
-      <main className="flex-1 flex overflow-hidden print:overflow-visible print:block">
-        <EditorPanel />
-        <PreviewPanel />
+      <main className="flex-1 flex overflow-hidden print:overflow-visible print:block relative">
+        <div className={`h-full md:w-[480px] md:shrink-0 ${activeTab === 'edit' ? 'w-full flex' : 'hidden md:flex'}`}>
+          <EditorPanel />
+        </div>
+        <div className={`flex-1 h-full ${activeTab === 'preview' ? 'flex' : 'hidden md:flex'}`}>
+          <PreviewPanel />
+        </div>
       </main>
+
+      {/* Mobile Bottom Settings Sheet Overlay */}
+      {showMobileSettings && (
+        <div className="md:hidden fixed inset-x-0 bottom-[49px] bg-slate-900 border-t border-slate-800 px-6 py-4 flex flex-col gap-3.5 print:hidden z-40 animate-in slide-in-from-bottom duration-200">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-350 flex items-center gap-1">
+              <Palette size={13} className="text-indigo-400" /> Customize Layout
+            </span>
+            <button 
+              onClick={() => setShowMobileSettings(false)}
+              className="text-[10px] text-slate-500 hover:text-slate-300 font-bold uppercase tracking-wider"
+            >
+              Close
+            </button>
+          </div>
+          
+          {/* Theme Selector */}
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+              Template Layout
+            </span>
+            <div className="flex gap-1.5">
+              {themesList.map((t) => (
+                <button
+                  key={t.value}
+                  onClick={() => setTheme(t.value)}
+                  className={`flex-1 text-[10px] py-2 rounded-md font-semibold transition-all duration-150 cursor-pointer text-center
+                    ${theme === t.value 
+                      ? 'bg-indigo-600 text-white' 
+                      : 'bg-slate-950 border border-slate-800 text-slate-400 hover:text-slate-200'}`}
+                >
+                  {t.label.split(' ')[0]}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Accent Color Picker */}
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+              Accent Color
+            </span>
+            <div className="flex items-center gap-3 bg-slate-950 border border-slate-800 rounded-lg p-2.5">
+              {([
+                { value: 'slate', colorClass: 'bg-slate-500', label: 'Slate' },
+                { value: 'indigo', colorClass: 'bg-indigo-500', label: 'Indigo' },
+                { value: 'emerald', colorClass: 'bg-emerald-500', label: 'Emerald' },
+                { value: 'rose', colorClass: 'bg-rose-500', label: 'Rose' },
+                { value: 'amber', colorClass: 'bg-amber-500', label: 'Amber' },
+              ] as const).map((c) => (
+                <button
+                  key={c.value}
+                  onClick={() => setAccentColor(c.value)}
+                  className={`w-6 h-6 rounded-full cursor-pointer transition-all duration-150 relative flex items-center justify-center
+                    ${c.colorClass}
+                    ${accentColor === c.value 
+                      ? 'ring-2 ring-white scale-110 shadow-md' 
+                      : 'hover:scale-105 opacity-80 hover:opacity-100'}`}
+                  title={c.label}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Bottom Navigation Bar */}
+      <div className="md:hidden border-t border-slate-800 bg-slate-900 px-4 py-2 flex items-center justify-between print:hidden shrink-0 z-40">
+        <div className="flex items-center gap-1 bg-slate-950 border border-slate-800 rounded-lg p-1 w-full max-w-[240px]">
+          <button
+            onClick={() => {
+              setActiveTab('edit');
+              setShowMobileSettings(false);
+            }}
+            className={`flex-1 text-[11px] py-1.5 rounded-md font-semibold text-center transition-all cursor-pointer
+              ${activeTab === 'edit' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}
+          >
+            Edit Form
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('preview');
+              setShowMobileSettings(false);
+            }}
+            className={`flex-1 text-[11px] py-1.5 rounded-md font-semibold text-center transition-all cursor-pointer
+              ${activeTab === 'preview' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}
+          >
+            Preview A4
+          </button>
+        </div>
+
+        {/* Mobile customize/theme/accent toggle button */}
+        <button
+          onClick={() => setShowMobileSettings(!showMobileSettings)}
+          className={`text-[11px] px-3.5 py-1.5 border rounded-lg font-semibold cursor-pointer transition-all flex items-center gap-1.5
+            ${showMobileSettings ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-slate-950 text-slate-300 border-slate-800'}`}
+        >
+          <Palette size={12} /> Customize
+        </button>
+      </div>
     </div>
   );
 }
