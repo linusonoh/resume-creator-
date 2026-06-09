@@ -8,6 +8,28 @@ import { Printer, Palette, ChevronDown, FileText, Image as ImageIcon, Eye, Arrow
 import { toJpeg } from 'html-to-image';
 import Image from 'next/image';
 
+const accentColorOptions = [
+  { value: 'slate', colorClass: 'bg-slate-500', label: 'Slate' },
+  { value: 'zinc', colorClass: 'bg-zinc-500', label: 'Zinc' },
+  { value: 'neutral', colorClass: 'bg-neutral-500', label: 'Neutral' },
+  { value: 'black', colorClass: 'bg-black', label: 'Black' },
+  { value: 'blue', colorClass: 'bg-blue-500', label: 'Blue' },
+  { value: 'indigo', colorClass: 'bg-indigo-500', label: 'Indigo' },
+  { value: 'violet', colorClass: 'bg-violet-500', label: 'Violet' },
+  { value: 'purple', colorClass: 'bg-purple-500', label: 'Purple' },
+  { value: 'fuchsia', colorClass: 'bg-fuchsia-500', label: 'Fuchsia' },
+  { value: 'pink', colorClass: 'bg-pink-500', label: 'Pink' },
+  { value: 'rose', colorClass: 'bg-rose-500', label: 'Rose' },
+  { value: 'red', colorClass: 'bg-red-500', label: 'Red' },
+  { value: 'orange', colorClass: 'bg-orange-500', label: 'Orange' },
+  { value: 'amber', colorClass: 'bg-amber-500', label: 'Amber' },
+  { value: 'lime', colorClass: 'bg-lime-500', label: 'Lime' },
+  { value: 'emerald', colorClass: 'bg-emerald-500', label: 'Emerald' },
+  { value: 'teal', colorClass: 'bg-teal-500', label: 'Teal' },
+  { value: 'cyan', colorClass: 'bg-cyan-500', label: 'Cyan' },
+  { value: 'sky', colorClass: 'bg-sky-500', label: 'Sky' },
+] as const;
+
 export default function ResumeBuilderPage() {
   const { theme, setTheme, accentColor, setAccentColor } = useResumeStore();
   const [mounted, setMounted] = useState(false);
@@ -245,7 +267,7 @@ export default function ResumeBuilderPage() {
           </div>
         </div>
 
-        {/* Controls: Theme Selector, Accent Color Picker, and Dynamic Exporter */}
+        {/* Controls: Theme Selector, Text Color Picker, and Dynamic Exporter */}
         <div className="flex items-center gap-4">
           {/* Theme Selector */}
           <div className="hidden md:flex items-center bg-slate-950 border border-slate-800 rounded-lg p-1">
@@ -269,19 +291,13 @@ export default function ResumeBuilderPage() {
             </div>
           </div>
 
-          {/* Accent Color Picker */}
-          <div className="hidden md:flex items-center bg-slate-950 border border-slate-800 rounded-lg p-1 h-[28px]">
+          {/* Text Color Picker */}
+          <div className="hidden md:flex items-center bg-slate-950 border border-slate-800 rounded-lg p-1">
             <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider px-2 flex items-center gap-1">
-              Accent
+              Text
             </span>
-            <div className="flex items-center gap-1.5 px-1.5">
-              {([
-                { value: 'slate', colorClass: 'bg-slate-500', label: 'Slate' },
-                { value: 'indigo', colorClass: 'bg-indigo-500', label: 'Indigo' },
-                { value: 'emerald', colorClass: 'bg-emerald-500', label: 'Emerald' },
-                { value: 'rose', colorClass: 'bg-rose-500', label: 'Rose' },
-                { value: 'amber', colorClass: 'bg-amber-500', label: 'Amber' },
-              ] as const).map((c) => (
+            <div className="grid grid-cols-10 gap-1.5 px-1.5">
+              {accentColorOptions.map((c) => (
                 <button
                   key={c.value}
                   onClick={() => setAccentColor(c.value)}
@@ -418,19 +434,13 @@ export default function ResumeBuilderPage() {
             </div>
           </div>
 
-          {/* Accent Color Picker */}
+          {/* Text Color Picker */}
           <div className="flex flex-col gap-1.5">
             <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-              Accent Color
+              Text Color
             </span>
-            <div className="flex items-center gap-3 bg-slate-950 border border-slate-800 rounded-lg p-2.5">
-              {([
-                { value: 'slate', colorClass: 'bg-slate-500', label: 'Slate' },
-                { value: 'indigo', colorClass: 'bg-indigo-500', label: 'Indigo' },
-                { value: 'emerald', colorClass: 'bg-emerald-500', label: 'Emerald' },
-                { value: 'rose', colorClass: 'bg-rose-500', label: 'Rose' },
-                { value: 'amber', colorClass: 'bg-amber-500', label: 'Amber' },
-              ] as const).map((c) => (
+            <div className="grid grid-cols-10 gap-2 bg-slate-950 border border-slate-800 rounded-lg p-2.5">
+              {accentColorOptions.map((c) => (
                 <button
                   key={c.value}
                   onClick={() => setAccentColor(c.value)}

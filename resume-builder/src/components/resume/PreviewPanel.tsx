@@ -14,6 +14,41 @@ interface ColorConfig {
 }
 
 const ACCENT_COLORS: Record<string, ColorConfig> = {
+  slate: {
+    primaryText: 'text-slate-900',
+    secondaryText: 'text-slate-700',
+    borderClass: 'border-slate-400',
+    bgClass: 'bg-slate-700',
+    linkHover: 'hover:text-slate-700',
+  },
+  zinc: {
+    primaryText: 'text-zinc-950',
+    secondaryText: 'text-zinc-700',
+    borderClass: 'border-zinc-500',
+    bgClass: 'bg-zinc-700',
+    linkHover: 'hover:text-zinc-700',
+  },
+  neutral: {
+    primaryText: 'text-neutral-950',
+    secondaryText: 'text-neutral-700',
+    borderClass: 'border-neutral-500',
+    bgClass: 'bg-neutral-700',
+    linkHover: 'hover:text-neutral-700',
+  },
+  black: {
+    primaryText: 'text-black',
+    secondaryText: 'text-black',
+    borderClass: 'border-black',
+    bgClass: 'bg-black',
+    linkHover: 'hover:text-black',
+  },
+  blue: {
+    primaryText: 'text-blue-950',
+    secondaryText: 'text-blue-800',
+    borderClass: 'border-blue-500',
+    bgClass: 'bg-blue-600',
+    linkHover: 'hover:text-blue-600',
+  },
   indigo: {
     primaryText: 'text-indigo-950',
     secondaryText: 'text-indigo-800',
@@ -21,12 +56,33 @@ const ACCENT_COLORS: Record<string, ColorConfig> = {
     bgClass: 'bg-indigo-600',
     linkHover: 'hover:text-indigo-600',
   },
-  emerald: {
-    primaryText: 'text-emerald-950',
-    secondaryText: 'text-emerald-800',
-    borderClass: 'border-emerald-500',
-    bgClass: 'bg-emerald-600',
-    linkHover: 'hover:text-emerald-600',
+  violet: {
+    primaryText: 'text-violet-950',
+    secondaryText: 'text-violet-800',
+    borderClass: 'border-violet-500',
+    bgClass: 'bg-violet-600',
+    linkHover: 'hover:text-violet-600',
+  },
+  purple: {
+    primaryText: 'text-purple-950',
+    secondaryText: 'text-purple-800',
+    borderClass: 'border-purple-500',
+    bgClass: 'bg-purple-600',
+    linkHover: 'hover:text-purple-600',
+  },
+  fuchsia: {
+    primaryText: 'text-fuchsia-950',
+    secondaryText: 'text-fuchsia-800',
+    borderClass: 'border-fuchsia-500',
+    bgClass: 'bg-fuchsia-600',
+    linkHover: 'hover:text-fuchsia-600',
+  },
+  pink: {
+    primaryText: 'text-pink-950',
+    secondaryText: 'text-pink-800',
+    borderClass: 'border-pink-500',
+    bgClass: 'bg-pink-600',
+    linkHover: 'hover:text-pink-600',
   },
   rose: {
     primaryText: 'text-rose-950',
@@ -35,6 +91,20 @@ const ACCENT_COLORS: Record<string, ColorConfig> = {
     bgClass: 'bg-rose-600',
     linkHover: 'hover:text-rose-600',
   },
+  red: {
+    primaryText: 'text-red-950',
+    secondaryText: 'text-red-800',
+    borderClass: 'border-red-500',
+    bgClass: 'bg-red-600',
+    linkHover: 'hover:text-red-600',
+  },
+  orange: {
+    primaryText: 'text-orange-950',
+    secondaryText: 'text-orange-800',
+    borderClass: 'border-orange-500',
+    bgClass: 'bg-orange-600',
+    linkHover: 'hover:text-orange-600',
+  },
   amber: {
     primaryText: 'text-amber-950',
     secondaryText: 'text-amber-800',
@@ -42,12 +112,40 @@ const ACCENT_COLORS: Record<string, ColorConfig> = {
     bgClass: 'bg-amber-600',
     linkHover: 'hover:text-amber-600',
   },
-  slate: {
-    primaryText: 'text-slate-900',
-    secondaryText: 'text-slate-700',
-    borderClass: 'border-slate-400',
-    bgClass: 'bg-slate-700',
-    linkHover: 'hover:text-slate-700',
+  lime: {
+    primaryText: 'text-lime-950',
+    secondaryText: 'text-lime-800',
+    borderClass: 'border-lime-500',
+    bgClass: 'bg-lime-600',
+    linkHover: 'hover:text-lime-700',
+  },
+  emerald: {
+    primaryText: 'text-emerald-950',
+    secondaryText: 'text-emerald-800',
+    borderClass: 'border-emerald-500',
+    bgClass: 'bg-emerald-600',
+    linkHover: 'hover:text-emerald-600',
+  },
+  teal: {
+    primaryText: 'text-teal-950',
+    secondaryText: 'text-teal-800',
+    borderClass: 'border-teal-500',
+    bgClass: 'bg-teal-600',
+    linkHover: 'hover:text-teal-600',
+  },
+  cyan: {
+    primaryText: 'text-cyan-950',
+    secondaryText: 'text-cyan-800',
+    borderClass: 'border-cyan-500',
+    bgClass: 'bg-cyan-600',
+    linkHover: 'hover:text-cyan-600',
+  },
+  sky: {
+    primaryText: 'text-sky-950',
+    secondaryText: 'text-sky-800',
+    borderClass: 'border-sky-500',
+    bgClass: 'bg-sky-600',
+    linkHover: 'hover:text-sky-600',
   },
 };
 

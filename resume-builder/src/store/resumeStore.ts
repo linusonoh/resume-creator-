@@ -27,7 +27,26 @@ export interface ResumeSection {
 }
 
 export type LayoutTheme = 'modern' | 'classic' | 'tech';
-export type AccentColor = 'slate' | 'indigo' | 'emerald' | 'rose' | 'amber';
+export type AccentColor =
+  | 'slate'
+  | 'zinc'
+  | 'neutral'
+  | 'black'
+  | 'blue'
+  | 'indigo'
+  | 'violet'
+  | 'purple'
+  | 'fuchsia'
+  | 'pink'
+  | 'rose'
+  | 'red'
+  | 'orange'
+  | 'amber'
+  | 'lime'
+  | 'emerald'
+  | 'teal'
+  | 'cyan'
+  | 'sky';
 
 export interface ResumeSnapshot {
   personalInfo: PersonalInfo;
