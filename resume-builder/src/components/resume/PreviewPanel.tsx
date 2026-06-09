@@ -108,9 +108,36 @@ export function parseMarkdown(text: string, linkHoverClass = 'hover:text-indigo-
 }
 
 export default function PreviewPanel() {
-  const { personalInfo, sections, theme, currentFontId, accentColor } = useResumeStore();
+  const { personalInfo, sections, theme, currentFontId, accentColor, borderStyle, borderColor } = useResumeStore();
   const activeFont = FONT_PAIRINGS.find((f) => f.id === currentFontId) || FONT_PAIRINGS[0];
   const colorConfig = ACCENT_COLORS[accentColor] || ACCENT_COLORS.indigo;
+
+  const BORDER_STYLES: Record<string, string> = {
+    none: '',
+    single: 'border-[4px] border-solid',
+    double: 'border-[8px] border-double',
+    'top-bottom': 'border-t-[6px] border-b-[6px] border-solid',
+    'left-accent': 'border-l-[8px] border-solid',
+  };
+
+  const BORDER_COLORS: Record<string, string> = {
+    accent: '', // uses colorConfig.borderClass
+    slate: 'border-slate-700',
+    muted: 'border-slate-300',
+    gold: 'border-amber-600',
+    rose: 'border-rose-600',
+  };
+
+  const activeBorderStyle = borderStyle || 'none';
+  const activeBorderColor = borderColor || 'accent';
+
+  const borderStyleClass = BORDER_STYLES[activeBorderStyle] || '';
+  const borderColorClass = activeBorderColor === 'accent' 
+    ? colorConfig.borderClass 
+    : (BORDER_COLORS[activeBorderColor] || 'border-slate-700');
+
+  const borderClasses = activeBorderStyle !== 'none' ? `${borderStyleClass} ${borderColorClass}` : '';
+  const printPaddingClass = activeBorderStyle !== 'none' ? 'print:p-[10mm]' : 'print:p-0';
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -288,7 +315,7 @@ export default function PreviewPanel() {
             top: 0
           } : {}}
           className={`w-[210mm] min-h-[297mm] bg-white shadow-2xl p-[20mm] text-slate-800 ${activeFont.bodyClass} leading-relaxed select-text
-            print:shadow-none print:w-full print:p-0 print:min-h-0 print:bg-white print:position-relative print:transform-none`}
+            print:shadow-none print:w-full ${printPaddingClass} print:min-h-0 print:bg-white print:position-relative print:transform-none ${borderClasses}`}
         >
           {renderHeader()}
           <div className="space-y-2">

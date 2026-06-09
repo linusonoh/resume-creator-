@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useResumeStore } from '@/store/resumeStore';
 import FontSelector from '@/components/resume/FontSelector';
+import BorderSelector from '@/components/resume/BorderSelector';
 import { serializeResumeToMarkdown, deserializeMarkdownToResume } from '@/store/markdownParser';
 import { 
   ChevronUp, 
@@ -383,6 +384,9 @@ export default function EditorPanel() {
 
         {/* Font Pairing Selection */}
         <FontSelector />
+
+        {/* Page Border Selection */}
+        <BorderSelector />
 
         {/* Dynamic Sections Accordions */}
         {sections.map((section, sIndex) => {

@@ -35,6 +35,8 @@ export interface ResumeSnapshot {
   theme: LayoutTheme;
   currentFontId: string;
   accentColor: AccentColor;
+  borderStyle: string;
+  borderColor: string;
 }
 
 export interface ResumeState {
@@ -43,6 +45,8 @@ export interface ResumeState {
   theme: LayoutTheme;
   currentFontId: string;
   accentColor: AccentColor;
+  borderStyle: string;
+  borderColor: string;
   past: ResumeSnapshot[];
   future: ResumeSnapshot[];
   updatePersonalInfo: (info: Partial<PersonalInfo>) => void;
@@ -55,6 +59,8 @@ export interface ResumeState {
   setTheme: (theme: LayoutTheme) => void;
   setFontId: (fontId: string) => void;
   setAccentColor: (accentColor: AccentColor) => void;
+  setBorderStyle: (borderStyle: string) => void;
+  setBorderColor: (borderColor: string) => void;
   resetResume: () => void;
   addCustomSection: (title: string, type: 'custom-text' | 'custom-list') => void;
   removeSection: (sectionId: string) => void;
@@ -150,6 +156,8 @@ export const useResumeStore = create<ResumeState>()(
       theme: 'modern',
       currentFontId: 'modern-clean',
       accentColor: 'indigo',
+      borderStyle: 'none',
+      borderColor: 'accent',
       past: [],
       future: [],
       
@@ -161,6 +169,8 @@ export const useResumeStore = create<ResumeState>()(
           theme: state.theme,
           currentFontId: state.currentFontId,
           accentColor: state.accentColor,
+          borderStyle: state.borderStyle,
+          borderColor: state.borderColor,
         };
         
         // Don't save duplicate snapshots
@@ -188,6 +198,8 @@ export const useResumeStore = create<ResumeState>()(
             theme: state.theme,
             currentFontId: state.currentFontId,
             accentColor: state.accentColor,
+            borderStyle: state.borderStyle,
+            borderColor: state.borderColor,
           };
           return {
             personalInfo: previous.personalInfo,
@@ -195,6 +207,8 @@ export const useResumeStore = create<ResumeState>()(
             theme: previous.theme,
             currentFontId: previous.currentFontId,
             accentColor: previous.accentColor,
+            borderStyle: previous.borderStyle,
+            borderColor: previous.borderColor,
             past: newPast,
             future: [currentSnapshot, ...state.future],
           };
@@ -211,6 +225,8 @@ export const useResumeStore = create<ResumeState>()(
             theme: state.theme,
             currentFontId: state.currentFontId,
             accentColor: state.accentColor,
+            borderStyle: state.borderStyle,
+            borderColor: state.borderColor,
           };
           return {
             personalInfo: next.personalInfo,
@@ -218,6 +234,8 @@ export const useResumeStore = create<ResumeState>()(
             theme: next.theme,
             currentFontId: next.currentFontId,
             accentColor: next.accentColor,
+            borderStyle: next.borderStyle,
+            borderColor: next.borderColor,
             past: [...state.past, currentSnapshot],
             future: newFuture,
           };
@@ -299,6 +317,14 @@ export const useResumeStore = create<ResumeState>()(
         get().saveHistory();
         set({ accentColor });
       },
+      setBorderStyle: (borderStyle) => {
+        get().saveHistory();
+        set({ borderStyle });
+      },
+      setBorderColor: (borderColor) => {
+        get().saveHistory();
+        set({ borderColor });
+      },
       resetResume: () => {
         get().saveHistory();
         set({
@@ -307,6 +333,8 @@ export const useResumeStore = create<ResumeState>()(
           theme: 'modern',
           currentFontId: 'modern-clean',
           accentColor: 'indigo',
+          borderStyle: 'none',
+          borderColor: 'accent',
         });
       },
       addCustomSection: (title, type) => {
@@ -345,6 +373,8 @@ export const useResumeStore = create<ResumeState>()(
         theme: state.theme,
         currentFontId: state.currentFontId,
         accentColor: state.accentColor,
+        borderStyle: state.borderStyle,
+        borderColor: state.borderColor,
       }),
     }
   )
