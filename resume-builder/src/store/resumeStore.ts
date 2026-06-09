@@ -71,12 +71,12 @@ export interface ResumeState {
 }
 
 const defaultPersonalInfo: PersonalInfo = {
-  name: 'Linus Onoh',
-  email: 'linus.onoh@example.com',
-  phone: '+1 (555) 019-2834',
-  website: 'https://linusonoh.dev',
-  github: 'https://github.com/linusonoh',
-  linkedin: 'https://linkedin.com/in/linusonoh',
+  name: '',
+  email: '',
+  phone: '',
+  website: '',
+  github: '',
+  linkedin: '',
 };
 
 const defaultSections: ResumeSection[] = [
@@ -84,7 +84,7 @@ const defaultSections: ResumeSection[] = [
     id: 'summary',
     type: 'summary',
     title: 'Professional Summary',
-    content: 'Dynamic and results-driven Software Engineer with 4+ years of experience building scalable web applications. Proficient in Next.js, React, TypeScript, and modern styling libraries like Tailwind CSS. Strong advocate for clean architecture and user-centric designs.',
+    content: '',
     items: [],
   },
   {
@@ -95,17 +95,10 @@ const defaultSections: ResumeSection[] = [
     items: [
       {
         id: 'exp-1',
-        title: 'Senior Frontend Developer',
-        subtitle: 'TechCorp Solutions',
-        dates: '2023 - Present',
-        description: 'Led development of a high-performance analytics dashboard using **Next.js** and **TypeScript**.\nOptimized bundle sizes and page load times by **35%** through lazy loading and selective caching.\nMentored 4 junior developers and established code quality standards.',
-      },
-      {
-        id: 'exp-2',
-        title: 'Software Engineer',
-        subtitle: 'DevBuilders Inc',
-        dates: '2021 - 2023',
-        description: 'Built and maintained multiple client e-commerce platforms using **React** and **Tailwind CSS**.\nIntegrated third-party APIs for processing payment and user authentication.\nDesigned responsive interfaces that reduced mobile bounce rate by **20%**.',
+        title: '',
+        subtitle: '',
+        dates: '',
+        description: '',
       }
     ],
   },
@@ -117,10 +110,10 @@ const defaultSections: ResumeSection[] = [
     items: [
       {
         id: 'proj-1',
-        title: 'Markdown Resume Builder',
-        subtitle: 'Next.js, TypeScript, Zustand, Tailwind',
-        dates: '2026',
-        description: 'Created a responsive web app enabling developers to build ATS-friendly resumes in real-time.\nImplemented A4 page scaling preview with live Markdown rendering.\nAdded PDF print export using specialized CSS pagination rules.',
+        title: '',
+        subtitle: '',
+        dates: '',
+        description: '',
       }
     ],
   },
@@ -132,10 +125,10 @@ const defaultSections: ResumeSection[] = [
     items: [
       {
         id: 'edu-1',
-        title: 'Bachelor of Science in Computer Science',
-        subtitle: 'State University',
-        dates: '2017 - 2021',
-        description: 'Graduated with Honors. Specialization in Web Technologies and Database Systems.',
+        title: '',
+        subtitle: '',
+        dates: '',
+        description: '',
       }
     ],
   },
@@ -143,7 +136,7 @@ const defaultSections: ResumeSection[] = [
     id: 'skills',
     type: 'skills',
     title: 'Skills',
-    content: 'Languages: JavaScript, TypeScript, Python, HTML5, CSS3\nFrameworks: React, Next.js, Node.js, Express\nTools: Git, Tailwind CSS, PostgreSQL, Docker, Jest',
+    content: '',
     items: [],
   }
 ];

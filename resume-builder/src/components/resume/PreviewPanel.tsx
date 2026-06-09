@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
-import { useResumeStore, ResumeSection } from '@/store/resumeStore';
+import { useResumeStore } from '@/store/resumeStore';
+import type { PersonalInfo, ResumeItem, ResumeSection } from '@/store/resumeStore';
 import { FONT_PAIRINGS } from '@/config/fonts';
 
 interface ColorConfig {
@@ -49,6 +50,90 @@ const ACCENT_COLORS: Record<string, ColorConfig> = {
     linkHover: 'hover:text-slate-700',
   },
 };
+
+const samplePersonalInfo: PersonalInfo = {
+  name: 'Your Name',
+  email: 'your.email@example.com',
+  phone: '+1 (555) 123-4567',
+  website: 'https://yourportfolio.com',
+  github: 'https://github.com/yourusername',
+  linkedin: 'https://linkedin.com/in/yourprofile',
+};
+
+const sampleSections: ResumeSection[] = [
+  {
+    id: 'sample-summary',
+    type: 'summary',
+    title: 'Professional Summary',
+    content: 'Results-driven professional with experience building reliable products, improving workflows, and collaborating across teams. Replace this preview text by filling in the editor fields.',
+    items: [],
+  },
+  {
+    id: 'sample-experience',
+    type: 'experience',
+    title: 'Work Experience',
+    content: '',
+    items: [
+      {
+        id: 'sample-exp-1',
+        title: 'Job Title',
+        subtitle: 'Company Name',
+        dates: '2024 - Present',
+        description: '- Describe your strongest achievement here\n- Add measurable impact, tools used, and responsibilities',
+      },
+    ],
+  },
+  {
+    id: 'sample-projects',
+    type: 'projects',
+    title: 'Featured Projects',
+    content: '',
+    items: [
+      {
+        id: 'sample-proj-1',
+        title: 'Project Name',
+        subtitle: 'Technologies or Tools',
+        dates: '2026',
+        description: '- Summarize what you built and why it mattered\n- Mention outcomes, users, performance, or business value',
+      },
+    ],
+  },
+  {
+    id: 'sample-education',
+    type: 'education',
+    title: 'Education',
+    content: '',
+    items: [
+      {
+        id: 'sample-edu-1',
+        title: 'Degree or Certification',
+        subtitle: 'School or Institution',
+        dates: 'Year',
+        description: 'Relevant coursework, honors, or specialization.',
+      },
+    ],
+  },
+  {
+    id: 'sample-skills',
+    type: 'skills',
+    title: 'Skills',
+    content: 'Languages: JavaScript, TypeScript, Python\nFrameworks: React, Next.js, Node.js\nTools: Git, Tailwind CSS, PostgreSQL',
+    items: [],
+  },
+];
+
+const hasText = (value: string) => value.trim().length > 0;
+
+const hasItemContent = (item: ResumeItem) =>
+  hasText(item.title) || hasText(item.subtitle) || hasText(item.dates) || hasText(item.description);
+
+const hasSectionContent = (section: ResumeSection) => {
+  const isTextSection = section.type === 'summary' || section.type === 'skills' || section.type === 'custom-text';
+  return isTextSection ? hasText(section.content) : section.items.some(hasItemContent);
+};
+
+const hasResumeContent = (personalInfo: PersonalInfo, sections: ResumeSection[]) =>
+  Object.values(personalInfo).some(hasText) || sections.some(hasSectionContent);
 
 // Lightweight, secure regex-based markdown parser
 export function parseMarkdown(text: string, linkHoverClass = 'hover:text-indigo-600'): string {
@@ -109,6 +194,9 @@ export function parseMarkdown(text: string, linkHoverClass = 'hover:text-indigo-
 
 export default function PreviewPanel() {
   const { personalInfo, sections, theme, currentFontId, accentColor, borderStyle, borderColor } = useResumeStore();
+  const showSamplePreview = !hasResumeContent(personalInfo, sections);
+  const previewPersonalInfo = showSamplePreview ? samplePersonalInfo : personalInfo;
+  const previewSections = showSamplePreview ? sampleSections : sections;
   const activeFont = FONT_PAIRINGS.find((f) => f.id === currentFontId) || FONT_PAIRINGS[0];
   const colorConfig = ACCENT_COLORS[accentColor] || ACCENT_COLORS.indigo;
 
@@ -214,7 +302,7 @@ export default function PreviewPanel() {
   }, [sections, theme, currentFontId, personalInfo]);
 
   const renderHeader = () => {
-    const { name, email, phone, website, github, linkedin } = personalInfo;
+    const { name, email, phone, website, github, linkedin } = previewPersonalInfo;
     const contacts = [
       phone && <span>{phone}</span>,
       email && <span>{email}</span>,
@@ -276,7 +364,8 @@ export default function PreviewPanel() {
   const renderSection = (section: ResumeSection) => {
     // Check if section is empty
     const isSummaryOrSkills = section.type === 'summary' || section.type === 'skills' || section.type === 'custom-text';
-    const isEmpty = isSummaryOrSkills ? !section.content : section.items.length === 0;
+    const visibleItems = section.items.filter(hasItemContent);
+    const isEmpty = isSummaryOrSkills ? !section.content.trim() : visibleItems.length === 0;
     if (isEmpty) return null;
 
     return (
@@ -302,7 +391,7 @@ export default function PreviewPanel() {
             <div dangerouslySetInnerHTML={{ __html: parseMarkdown(section.content, colorConfig.linkHover) }} />
           ) : (
             <div className="space-y-4">
-              {section.items.map((item) => (
+              {visibleItems.map((item) => (
                 <div key={item.id}>
                   <div className="flex justify-between items-baseline text-slate-900">
                     <span className={`text-xs ${activeFont.headingClass}`}>{item.title}</span>
@@ -367,7 +456,7 @@ export default function PreviewPanel() {
           )}
           {renderHeader()}
           <div className="space-y-2">
-            {sections.map(renderSection)}
+            {previewSections.map(renderSection)}
           </div>
         </div>
       </div>

@@ -43,6 +43,8 @@ export default function BorderSelector() {
 
   const activeStyle = borderStyle || 'none';
   const activeColor = borderColor || 'accent';
+  const selectedStyle = BORDER_STYLES.find((style) => style.id === activeStyle) || BORDER_STYLES[0];
+  const selectedColor = BORDER_COLORS.find((color) => color.id === activeColor) || BORDER_COLORS[0];
 
   // Map color ID to bg color classes for the visual indicator dots
   const getDotColorClass = (colorId: string) => {
@@ -82,32 +84,22 @@ export default function BorderSelector() {
 
       <div className="p-3.5 space-y-4">
         {/* Style Selection */}
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <label className="block text-[10px] uppercase font-bold tracking-wider text-slate-400">Border Design</label>
-          <div className="grid grid-cols-1 gap-1.5">
-            {BORDER_STYLES.map((style) => {
-              const isActive = activeStyle === style.id;
-              return (
-                <button
-                  key={style.id}
-                  onClick={() => setBorderStyle(style.id)}
-                  className={`w-full text-left p-2 rounded-lg border transition-all duration-150 cursor-pointer flex items-center justify-between
-                    ${isActive 
-                      ? 'bg-indigo-950/40 border-indigo-500/80 text-white' 
-                      : 'bg-slate-900/40 border-slate-800 hover:border-slate-700 text-slate-350 hover:text-slate-200'}`}
-                >
-                  <div className="min-w-0 pr-2">
-                    <div className="text-xs font-bold">{style.name}</div>
-                    <div className="text-[9px] text-slate-500 mt-0.5 leading-none">{style.desc}</div>
-                  </div>
-                  {isActive && (
-                    <span className="text-[8px] bg-indigo-600/30 text-indigo-400 px-1.5 py-0.5 rounded font-mono font-bold shrink-0">
-                      Selected
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+          <select
+            value={activeStyle}
+            onChange={(e) => setBorderStyle(e.target.value)}
+            className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 font-medium cursor-pointer"
+          >
+            {BORDER_STYLES.map((style) => (
+              <option key={style.id} value={style.id}>
+                {style.name}
+              </option>
+            ))}
+          </select>
+          <div className="rounded-lg border border-slate-800 bg-slate-900/40 p-2">
+            <div className="text-xs font-bold text-slate-200">{selectedStyle.name}</div>
+            <div className="text-[9px] text-slate-500 mt-0.5 leading-relaxed">{selectedStyle.desc}</div>
           </div>
         </div>
 
@@ -117,33 +109,23 @@ export default function BorderSelector() {
             <label className="block text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1">
               <Palette size={11} className="text-indigo-400" /> Border Color
             </label>
-            <div className="grid grid-cols-1 gap-1.5">
-              {BORDER_COLORS.map((color) => {
-                const isActive = activeColor === color.id;
-                return (
-                  <button
-                    key={color.id}
-                    onClick={() => setBorderColor(color.id)}
-                    className={`w-full text-left p-2 rounded-lg border transition-all duration-150 cursor-pointer flex items-center justify-between
-                      ${isActive 
-                        ? 'bg-indigo-950/40 border-indigo-500/80 text-white' 
-                        : 'bg-slate-900/40 border-slate-800 hover:border-slate-700 text-slate-350 hover:text-slate-200'}`}
-                  >
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className={`w-2.5 h-2.5 rounded-full shrink-0 border border-white/10 ${getDotColorClass(color.id)}`} />
-                      <div className="min-w-0">
-                        <div className="text-xs font-bold">{color.name}</div>
-                        <div className="text-[9px] text-slate-500 mt-0.5 leading-none">{color.desc}</div>
-                      </div>
-                    </div>
-                    {isActive && (
-                      <span className="text-[8px] bg-indigo-600/30 text-indigo-400 px-1.5 py-0.5 rounded font-mono font-bold shrink-0">
-                        Selected
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
+            <select
+              value={activeColor}
+              onChange={(e) => setBorderColor(e.target.value)}
+              className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 font-medium cursor-pointer"
+            >
+              {BORDER_COLORS.map((color) => (
+                <option key={color.id} value={color.id}>
+                  {color.name}
+                </option>
+              ))}
+            </select>
+            <div className="rounded-lg border border-slate-800 bg-slate-900/40 p-2 flex items-center gap-2">
+              <span className={`w-3 h-3 rounded-full shrink-0 border border-white/10 ${getDotColorClass(selectedColor.id)}`} />
+              <div className="min-w-0">
+                <div className="text-xs font-bold text-slate-200">{selectedColor.name}</div>
+                <div className="text-[9px] text-slate-500 mt-0.5 leading-relaxed">{selectedColor.desc}</div>
+              </div>
             </div>
           </div>
         )}
