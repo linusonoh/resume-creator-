@@ -73,6 +73,9 @@ export default function EditorPanel() {
       sections: state.sections,
       theme: state.theme,
       currentFontId: state.currentFontId,
+      accentColor: state.accentColor,
+      borderStyle: state.borderStyle,
+      borderColor: state.borderColor,
     }, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
@@ -98,6 +101,15 @@ export default function EditorPanel() {
           }
           if (data.currentFontId) {
             useResumeStore.getState().setFontId(data.currentFontId);
+          }
+          if (data.accentColor) {
+            useResumeStore.getState().setAccentColor(data.accentColor);
+          }
+          if (data.borderStyle) {
+            useResumeStore.getState().setBorderStyle(data.borderStyle);
+          }
+          if (data.borderColor) {
+            useResumeStore.getState().setBorderColor(data.borderColor);
           }
           alert("Resume data imported successfully!");
         } else {

@@ -8,16 +8,34 @@ const BORDER_STYLES = [
   { id: 'none', name: 'No Border', desc: 'Clean, borderless page layout' },
   { id: 'single', name: 'Single Box', desc: 'Simple solid outer border' },
   { id: 'double', name: 'Double Box', desc: 'Elegant double-line border' },
+  { id: 'thin', name: 'Thin Frame', desc: 'Light full-page professional frame' },
+  { id: 'thick', name: 'Bold Frame', desc: 'Strong executive outer frame' },
+  { id: 'dashed', name: 'Dashed Frame', desc: 'Modern dashed document outline' },
+  { id: 'dotted', name: 'Dotted Frame', desc: 'Subtle dotted page outline' },
+  { id: 'inset', name: 'Inset Frame', desc: 'Inner framed resume page edge' },
   { id: 'top-bottom', name: 'Top & Bottom', desc: 'Sleek top and bottom framing lines' },
   { id: 'left-accent', name: 'Left Accent', desc: 'Bold vertical line on the left side' },
+  { id: 'right-accent', name: 'Right Accent', desc: 'Bold vertical line on the right side' },
+  { id: 'side-rails', name: 'Side Rails', desc: 'Balanced vertical rails on both sides' },
+  { id: 'top-accent', name: 'Top Accent', desc: 'Strong header-edge accent line' },
+  { id: 'bottom-accent', name: 'Bottom Accent', desc: 'Clean footer-edge accent line' },
+  { id: 'bracket', name: 'Corner Bracket', desc: 'Minimal corner-framed layout' },
 ];
 
 const BORDER_COLORS = [
   { id: 'accent', name: 'Theme Accent', desc: 'Dynamically matches theme accent' },
   { id: 'slate', name: 'Charcoal', desc: 'Executive dark charcoal line' },
   { id: 'muted', name: 'Subtle Gray', desc: 'Very light grey minimalist line' },
+  { id: 'black', name: 'True Black', desc: 'Crisp formal black line' },
+  { id: 'navy', name: 'Deep Navy', desc: 'Classic navy blue frame' },
+  { id: 'indigo', name: 'Royal Indigo', desc: 'Polished blue-purple line' },
+  { id: 'emerald', name: 'Emerald', desc: 'Confident green accent' },
+  { id: 'teal', name: 'Teal', desc: 'Calm blue-green accent' },
+  { id: 'sky', name: 'Sky Blue', desc: 'Light modern blue accent' },
   { id: 'gold', name: 'Classic Gold', desc: 'Warm professional amber/gold line' },
+  { id: 'bronze', name: 'Bronze', desc: 'Warm muted metallic tone' },
   { id: 'rose', name: 'Crimson Red', desc: 'Distinguished crimson red line' },
+  { id: 'purple', name: 'Purple', desc: 'Creative deep purple accent' },
 ];
 
 export default function BorderSelector() {
@@ -41,8 +59,16 @@ export default function BorderSelector() {
     const map: Record<string, string> = {
       slate: 'bg-slate-700',
       muted: 'bg-slate-300',
+      black: 'bg-black',
+      navy: 'bg-blue-950',
+      indigo: 'bg-indigo-700',
+      emerald: 'bg-emerald-600',
+      teal: 'bg-teal-600',
+      sky: 'bg-sky-500',
       gold: 'bg-amber-600',
+      bronze: 'bg-orange-700',
       rose: 'bg-rose-600',
+      purple: 'bg-purple-700',
     };
     return map[colorId] || 'bg-slate-700';
   };

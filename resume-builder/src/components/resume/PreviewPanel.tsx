@@ -116,16 +116,50 @@ export default function PreviewPanel() {
     none: '',
     single: 'border-[4px] border-solid',
     double: 'border-[8px] border-double',
+    thin: 'border border-solid',
+    thick: 'border-[10px] border-solid',
+    dashed: 'border-[4px] border-dashed',
+    dotted: 'border-[4px] border-dotted',
+    inset: 'border-[3px] border-solid',
     'top-bottom': 'border-t-[6px] border-b-[6px] border-solid',
+    'top-accent': 'border-t-[10px] border-solid',
+    'bottom-accent': 'border-b-[10px] border-solid',
     'left-accent': 'border-l-[8px] border-solid',
+    'right-accent': 'border-r-[8px] border-solid',
+    'side-rails': 'border-l-[6px] border-r-[6px] border-solid',
+    bracket: 'border-0',
   };
 
   const BORDER_COLORS: Record<string, string> = {
     accent: '', // uses colorConfig.borderClass
     slate: 'border-slate-700',
     muted: 'border-slate-300',
+    black: 'border-black',
+    navy: 'border-blue-950',
+    indigo: 'border-indigo-700',
+    emerald: 'border-emerald-600',
+    teal: 'border-teal-600',
+    sky: 'border-sky-500',
     gold: 'border-amber-600',
+    bronze: 'border-orange-700',
     rose: 'border-rose-600',
+    purple: 'border-purple-700',
+  };
+
+  const BRACKET_COLORS: Record<string, string> = {
+    accent: colorConfig.borderClass.replace('border-', 'border-'),
+    slate: 'border-slate-700',
+    muted: 'border-slate-300',
+    black: 'border-black',
+    navy: 'border-blue-950',
+    indigo: 'border-indigo-700',
+    emerald: 'border-emerald-600',
+    teal: 'border-teal-600',
+    sky: 'border-sky-500',
+    gold: 'border-amber-600',
+    bronze: 'border-orange-700',
+    rose: 'border-rose-600',
+    purple: 'border-purple-700',
   };
 
   const activeBorderStyle = borderStyle || 'none';
@@ -137,6 +171,9 @@ export default function PreviewPanel() {
     : (BORDER_COLORS[activeBorderColor] || 'border-slate-700');
 
   const borderClasses = activeBorderStyle !== 'none' ? `${borderStyleClass} ${borderColorClass}` : '';
+  const bracketBorderClass = BRACKET_COLORS[activeBorderColor] || colorConfig.borderClass;
+  const showCornerBrackets = activeBorderStyle === 'bracket';
+  const showInsetFrame = activeBorderStyle === 'inset';
   const printPaddingClass = activeBorderStyle !== 'none' ? 'print:p-[10mm]' : 'print:p-0';
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -315,8 +352,19 @@ export default function PreviewPanel() {
             top: 0
           } : {}}
           className={`w-[210mm] min-h-[297mm] bg-white shadow-2xl p-[20mm] text-slate-800 ${activeFont.bodyClass} leading-relaxed select-text
-            print:shadow-none print:w-full ${printPaddingClass} print:min-h-0 print:bg-white print:position-relative print:transform-none ${borderClasses}`}
+            print:shadow-none print:w-full ${printPaddingClass} print:min-h-0 print:bg-white print:position-relative print:transform-none ${borderClasses} relative`}
         >
+          {showCornerBrackets && (
+            <>
+              <span className={`absolute left-[10mm] top-[10mm] w-12 h-12 border-l-[5px] border-t-[5px] ${bracketBorderClass}`} />
+              <span className={`absolute right-[10mm] top-[10mm] w-12 h-12 border-r-[5px] border-t-[5px] ${bracketBorderClass}`} />
+              <span className={`absolute left-[10mm] bottom-[10mm] w-12 h-12 border-l-[5px] border-b-[5px] ${bracketBorderClass}`} />
+              <span className={`absolute right-[10mm] bottom-[10mm] w-12 h-12 border-r-[5px] border-b-[5px] ${bracketBorderClass}`} />
+            </>
+          )}
+          {showInsetFrame && (
+            <span className={`absolute inset-[10mm] border ${bracketBorderClass} pointer-events-none`} />
+          )}
           {renderHeader()}
           <div className="space-y-2">
             {sections.map(renderSection)}
