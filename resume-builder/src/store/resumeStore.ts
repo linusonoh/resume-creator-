@@ -141,6 +141,99 @@ const defaultSections: ResumeSection[] = [
   }
 ];
 
+const legacySamplePersonalInfo: PersonalInfo = {
+  name: 'Linus Onoh',
+  email: 'linus.onoh@example.com',
+  phone: '+1 (555) 019-2834',
+  website: 'https://linusonoh.dev',
+  github: 'https://github.com/linusonoh',
+  linkedin: 'https://linkedin.com/in/linusonoh',
+};
+
+const legacySampleById: Record<string, Partial<ResumeSection>> = {
+  summary: {
+    content: 'Dynamic and results-driven Software Engineer with 4+ years of experience building scalable web applications. Proficient in Next.js, React, TypeScript, and modern styling libraries like Tailwind CSS. Strong advocate for clean architecture and user-centric designs.',
+  },
+  skills: {
+    content: 'Languages: JavaScript, TypeScript, Python, HTML5, CSS3\nFrameworks: React, Next.js, Node.js, Express\nTools: Git, Tailwind CSS, PostgreSQL, Docker, Jest',
+  },
+};
+
+const legacySampleItemsById: Record<string, ResumeItem> = {
+  'exp-1': {
+    id: 'exp-1',
+    title: 'Senior Frontend Developer',
+    subtitle: 'TechCorp Solutions',
+    dates: '2023 - Present',
+    description: 'Led development of a high-performance analytics dashboard using **Next.js** and **TypeScript**.\nOptimized bundle sizes and page load times by **35%** through lazy loading and selective caching.\nMentored 4 junior developers and established code quality standards.',
+  },
+  'exp-2': {
+    id: 'exp-2',
+    title: 'Software Engineer',
+    subtitle: 'DevBuilders Inc',
+    dates: '2021 - 2023',
+    description: 'Built and maintained multiple client e-commerce platforms using **React** and **Tailwind CSS**.\nIntegrated third-party APIs for processing payment and user authentication.\nDesigned responsive interfaces that reduced mobile bounce rate by **20%**.',
+  },
+  'proj-1': {
+    id: 'proj-1',
+    title: 'Markdown Resume Builder',
+    subtitle: 'Next.js, TypeScript, Zustand, Tailwind',
+    dates: '2026',
+    description: 'Created a responsive web app enabling developers to build ATS-friendly resumes in real-time.\nImplemented A4 page scaling preview with live Markdown rendering.\nAdded PDF print export using specialized CSS pagination rules.',
+  },
+  'edu-1': {
+    id: 'edu-1',
+    title: 'Bachelor of Science in Computer Science',
+    subtitle: 'State University',
+    dates: '2017 - 2021',
+    description: 'Graduated with Honors. Specialization in Web Technologies and Database Systems.',
+  },
+};
+
+const isSameValue = (first: unknown, second: unknown) =>
+  JSON.stringify(first) === JSON.stringify(second);
+
+const blankItem = (item: ResumeItem): ResumeItem => ({
+  ...item,
+  title: '',
+  subtitle: '',
+  dates: '',
+  description: '',
+});
+
+const migrateLegacyDemoData = (persistedState: unknown) => {
+  if (!persistedState || typeof persistedState !== 'object') return persistedState;
+
+  const state = persistedState as Partial<ResumeState>;
+  const nextState: Partial<ResumeState> = { ...state };
+
+  if (state.personalInfo && isSameValue(state.personalInfo, legacySamplePersonalInfo)) {
+    nextState.personalInfo = defaultPersonalInfo;
+  }
+
+  if (Array.isArray(state.sections)) {
+    nextState.sections = state.sections.map((section) => {
+      const legacySection = legacySampleById[section.id];
+      const nextSection: ResumeSection = { ...section };
+
+      if (legacySection?.content && section.content === legacySection.content) {
+        nextSection.content = '';
+      }
+
+      nextSection.items = section.items
+        .map((item) => {
+          const legacyItem = legacySampleItemsById[item.id];
+          return legacyItem && isSameValue(item, legacyItem) ? blankItem(item) : item;
+        })
+        .filter((item) => item.id !== 'exp-2' || !isSameValue(item, blankItem(item)));
+
+      return nextSection;
+    });
+  }
+
+  return nextState;
+};
+
 export const useResumeStore = create<ResumeState>()(
   persist(
     (set, get) => ({
@@ -255,10 +348,10 @@ export const useResumeStore = create<ResumeState>()(
             if (s.id !== sectionId) return s;
             const newItem: ResumeItem = {
               id: `${sectionId}-${Date.now()}`,
-              title: 'New Item',
-              subtitle: 'Subtitle / Role',
-              dates: 'Date Range',
-              description: 'Description (supports **Markdown**)',
+              title: '',
+              subtitle: '',
+              dates: '',
+              description: '',
             };
             return { ...s, items: [...s.items, newItem] };
           }),
@@ -360,6 +453,8 @@ export const useResumeStore = create<ResumeState>()(
     }),
     {
       name: 'markdown-resume-store',
+      version: 1,
+      migrate: migrateLegacyDemoData,
       partialize: (state) => ({
         personalInfo: state.personalInfo,
         sections: state.sections,
