@@ -132,8 +132,29 @@ const hasSectionContent = (section: ResumeSection) => {
   return isTextSection ? hasText(section.content) : section.items.some(hasItemContent);
 };
 
-const hasResumeContent = (personalInfo: PersonalInfo, sections: ResumeSection[]) =>
-  Object.values(personalInfo).some(hasText) || sections.some(hasSectionContent);
+const getPreviewPersonalInfo = (personalInfo: PersonalInfo): PersonalInfo => ({
+  name: hasText(personalInfo.name) ? personalInfo.name : samplePersonalInfo.name,
+  email: hasText(personalInfo.email) ? personalInfo.email : samplePersonalInfo.email,
+  phone: hasText(personalInfo.phone) ? personalInfo.phone : samplePersonalInfo.phone,
+  website: hasText(personalInfo.website) ? personalInfo.website : samplePersonalInfo.website,
+  github: hasText(personalInfo.github) ? personalInfo.github : samplePersonalInfo.github,
+  linkedin: hasText(personalInfo.linkedin) ? personalInfo.linkedin : samplePersonalInfo.linkedin,
+});
+
+const getSampleSectionFor = (section: ResumeSection) =>
+  sampleSections.find((sample) => sample.type === section.type || sample.title === section.title);
+
+const getPreviewSections = (sections: ResumeSection[]) => {
+  const mergedSections = sections.map((section) => {
+    if (hasSectionContent(section)) return section;
+    return getSampleSectionFor(section) || section;
+  });
+
+  const existingTypes = new Set(sections.map((section) => section.type));
+  const missingSampleSections = sampleSections.filter((sample) => !existingTypes.has(sample.type));
+
+  return [...mergedSections, ...missingSampleSections];
+};
 
 // Lightweight, secure regex-based markdown parser
 export function parseMarkdown(text: string, linkHoverClass = 'hover:text-indigo-600'): string {
@@ -194,9 +215,8 @@ export function parseMarkdown(text: string, linkHoverClass = 'hover:text-indigo-
 
 export default function PreviewPanel() {
   const { personalInfo, sections, theme, currentFontId, accentColor, borderStyle, borderColor } = useResumeStore();
-  const showSamplePreview = !hasResumeContent(personalInfo, sections);
-  const previewPersonalInfo = showSamplePreview ? samplePersonalInfo : personalInfo;
-  const previewSections = showSamplePreview ? sampleSections : sections;
+  const previewPersonalInfo = getPreviewPersonalInfo(personalInfo);
+  const previewSections = getPreviewSections(sections);
   const activeFont = FONT_PAIRINGS.find((f) => f.id === currentFontId) || FONT_PAIRINGS[0];
   const colorConfig = ACCENT_COLORS[accentColor] || ACCENT_COLORS.indigo;
 
